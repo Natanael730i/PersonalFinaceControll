@@ -53,11 +53,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userDao.findByEmail(email);
-    }
-
-    @Override
     public User update(User user, UUID id) {
         User oldUser = userDao.findById(id).orElse(null);
         if (oldUser == null) {

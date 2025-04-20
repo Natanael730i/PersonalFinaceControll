@@ -27,6 +27,16 @@ public class SecurityFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.equals("/login") ||
+                path.equals("/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = getToken(request);
         Boolean valid = jwtConfig.isValidToken(token);
         if (valid) {

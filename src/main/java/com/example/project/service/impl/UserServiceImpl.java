@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
+        user.setPassword(Utils.hashPassword(user.getPassword()));
         return userDao.save(user);
     }
 

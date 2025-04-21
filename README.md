@@ -41,9 +41,9 @@ API para gerenciamento de finanças pessoais, permitindo o controle de receitas,
 3. Configure o banco de dados PostgreSQL e atualize as credenciais no application.properties.
 
 4. Execute o projeto:
-```bash
-./mvnw spring-boot:run
-```
+   ```bash
+   ./mvnw spring-boot:run
+   ```
 
 ## 📚 Documentação da API
 Acesse a documentação interativa da API em:

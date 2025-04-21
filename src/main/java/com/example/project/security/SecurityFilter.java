@@ -17,8 +17,13 @@ import java.util.UUID;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    private JwtConfig jwtConfig;
-    private UserService userService;
+    private final JwtConfig jwtConfig;
+    private final UserService userService;
+
+    public SecurityFilter(JwtConfig jwtConfig, UserService userService) {
+        this.jwtConfig = jwtConfig;
+        this.userService = userService;
+    }
 
     @Override
     protected void doFilterInternal(
@@ -29,10 +34,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.startsWith("/") ||
+        if (path.startsWith("/swagger-ui") ||
                 path.startsWith("/v3/api-docs") ||
-                path.equals("/login") ||
-                path.equals("/register")) {
+                path.equals("/user/login")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -47,8 +51,8 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private void authenticateUser(String token) {
-        UUID userId = jwtConfig.getUserId(token);
-        User user = userService.findById(userId);
+        String email = jwtConfig.getUserEmail(token);
+        User user = userService.getUserByEmail(email);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

@@ -50,12 +50,12 @@ public class JwtConfig {
         }
     }
 
-    public UUID getUserId(String token) {
+    public String getUserEmail(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return UUID.fromString(claims.getSubject());
+        return claims.getSubject();
     }
 }

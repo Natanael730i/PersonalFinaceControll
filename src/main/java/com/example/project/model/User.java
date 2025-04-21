@@ -1,6 +1,7 @@
 package com.example.project.model;
 
 import com.example.project.utils.Utils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch =  FetchType.EAGER)
     @JoinTable(
             name = "user_profile",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -36,6 +37,7 @@ public class User implements UserDetails {
     private String password;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return profiles.stream()
                 .map(p -> (GrantedAuthority) () -> p.getName().toUpperCase())
@@ -43,26 +45,31 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return this.email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

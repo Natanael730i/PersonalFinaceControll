@@ -15,22 +15,22 @@ public class GenericController<T, ID> {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<T> getUserById(@PathVariable ID id) {
+    public ResponseEntity<T> findById(@PathVariable ID id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<T>> getAllUsers() {
+    public ResponseEntity<List<T>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<T> createUser(@RequestBody T user) {
+    public ResponseEntity<T> create(@RequestBody T user) {
         return ResponseEntity.ok(service.save(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<T> updateUser(@PathVariable ID id, @RequestBody T t) {
+    public ResponseEntity<T> update(@PathVariable ID id, @RequestBody T t) {
         return ResponseEntity.ok(service.update(t, id));
     }
 

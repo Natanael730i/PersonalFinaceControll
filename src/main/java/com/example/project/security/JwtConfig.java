@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 public class JwtConfig {
@@ -31,7 +30,7 @@ public class JwtConfig {
 
         return Jwts.builder()
                 .setSubject(user.getEmail())
-                .setIssuer("localhost:8080")
+                .setIssuer("Personal Finance Control API")
                 .setIssuedAt(new Date())
                 .setExpiration(expirationData)
                 .signWith(secretKey, SignatureAlgorithm.HS512)

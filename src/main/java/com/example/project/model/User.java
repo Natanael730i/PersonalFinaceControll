@@ -9,12 +9,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Entity(name = "'USER'")
 public class User implements UserDetails {
+
+    public User() {
+        this.profiles = new HashSet<>(profiles);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,7 +36,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "profile_id")
     )
-    private Set<Profile> profiles;
+    private Set<Profile> profiles = new HashSet<>();
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;

@@ -17,6 +17,9 @@ public class Profile implements GrantedAuthority {
 
     private String name;
 
+    @Column(unique = true)
+    private Long code;
+
     @Override
     public String getAuthority() {
         return this.name;

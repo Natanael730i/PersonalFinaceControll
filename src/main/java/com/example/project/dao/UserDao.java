@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface UserDao extends CrudRepository<User, UUID> {
     User findByEmail(String email);
+
+    boolean existsByEmail(String mail);
 }

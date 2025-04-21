@@ -47,9 +47,9 @@ API para gerenciamento de finanças pessoais, permitindo o controle de receitas,
 
 ## 📚 Documentação da API
 Acesse a documentação interativa da API em:
-```url
-http://localhost:8080/swagger-ui.html
-```
+   ```url
+   http://localhost:8080/swagger-ui.html
+   ```
 
 ## 🤝 Contribuição
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.

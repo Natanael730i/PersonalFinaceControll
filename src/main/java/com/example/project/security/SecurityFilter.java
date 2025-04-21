@@ -29,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.startsWith("/swagger-ui") ||
+        if (path.startsWith("/") ||
                 path.startsWith("/v3/api-docs") ||
                 path.equals("/login") ||
                 path.equals("/register")) {

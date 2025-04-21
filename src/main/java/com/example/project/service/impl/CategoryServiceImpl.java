@@ -3,6 +3,7 @@ package com.example.project.service.impl;
 import com.example.project.dao.CategoryDao;
 import com.example.project.model.Category;
 import com.example.project.service.CategoryService;
+import com.example.project.utils.Utils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,26 +20,35 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> findAll() {
-        return List.of();
+        return (List<Category>) categoryDao.findAll();
     }
 
     @Override
     public Category findById(UUID uuid) {
-        return null;
+        return categoryDao.findById(uuid).orElse(null);
     }
 
     @Override
     public Category save(Category category) {
-        return null;
+        return categoryDao.save(category);
     }
 
     @Override
-    public Category deleteById(UUID uuid) {
-        return null;
+    public Category deleteById(UUID id) {
+        Category category = categoryDao.findById(id).orElse(null);
+        if (category != null) {
+            categoryDao.delete(category);
+        }
+        return category;
     }
 
     @Override
     public Category update(Category category, UUID uuid) {
-        return null;
+        Category oldCategory = categoryDao.findById(uuid).orElse(null);
+        if (oldCategory == null) {
+            return null;
+        }
+        Utils.copyNonNullProperties(category, oldCategory);
+        return categoryDao.save(oldCategory);
     }
 }

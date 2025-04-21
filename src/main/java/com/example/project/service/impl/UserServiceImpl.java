@@ -1,7 +1,9 @@
 package com.example.project.service.impl;
 
+import com.example.project.dao.ProfileDao;
 import com.example.project.dao.UserDao;
 import com.example.project.dto.LoginDto;
+import com.example.project.model.Profile;
 import com.example.project.model.User;
 import com.example.project.security.JwtConfig;
 import com.example.project.service.UserService;
@@ -12,18 +14,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final AuthenticationManager authManager;
+    private final ProfileDao profileDao;
     private final UserDao userDao;
+    private final JwtConfig  jwtConfig;
 
-    public UserServiceImpl(AuthenticationManager authManager, UserDao userDao) {
-        this.authManager = authManager;
+    public UserServiceImpl(ProfileDao profileDao, UserDao userDao, JwtConfig jwtConfig) {
+        this.profileDao = profileDao;
         this.userDao = userDao;
+        this.jwtConfig = jwtConfig;
     }
 
     @Override
@@ -38,7 +42,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        user.setPassword(Utils.hashPassword(user.getPassword()));
+
+        Set<Profile> profiles = new HashSet<>();
+
+        if (user.getProfiles() != null) {
+            for (Profile profile : user.getProfiles()) {
+                profileDao.findById(profile.getId()).ifPresent(profiles::add);
+            }
+        }
+        user.setProfiles(profiles);
         return userDao.save(user);
     }
 
@@ -63,14 +75,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(LoginDto user) throws Exception {
-        JwtConfig jwtConfig = new JwtConfig();
-        UsernamePasswordAuthenticationToken loginData = new UsernamePasswordAuthenticationToken(user.email(), user.password());
-        try {
-            Authentication authentication = authManager.authenticate(loginData);
-            return jwtConfig.createJWT(authentication);
-        } catch (AuthenticationException e) {
-            throw new Exception(e.getMessage());
+    public String login(LoginDto login) throws Exception {
+        User user = userDao.findByEmail(login.email());
+
+        if (user == null || !Utils.validatePassword(login.password(), user.getPassword())) {
+            throw new Exception("Usuário ou senha inválidos.");
         }
+
+        return jwtConfig.createJWT(user);
     }
 }

@@ -21,10 +21,15 @@ public class User implements UserDetails {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     @ManyToMany
-    @JoinTable(name = "PROFILE")
+    @JoinTable(
+            name = "user_profile",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "profile_id")
+    )
     private Set<Profile> profiles;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -65,6 +70,8 @@ public class User implements UserDetails {
     @PreUpdate
     @PrePersist
     public void prePersist() {
-        this.password = Utils.hashPassword(this.password);
+        if (!this.password.startsWith("$2a$")) {
+            this.password = Utils.hashPassword(this.password);
+        }
     }
 }

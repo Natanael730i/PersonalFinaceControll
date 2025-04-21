@@ -1,3 +1,6 @@
+![image](https://github.com/user-attachments/assets/917bf4be-014a-4a11-843c-25f33ae7f4fe)
+
+
 # PersonalFinanceControl
 
 API para gerenciamento de finanças pessoais, permitindo o controle de receitas, despesas e perfis de usuário com autenticação segura.

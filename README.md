@@ -47,7 +47,7 @@ API para gerenciamento de finanças pessoais, permitindo o controle de receitas,
 
 ## 📚 Documentação da API
 Acesse a documentação interativa da API em:
-   ```url
+   ```bash
    http://localhost:8080/swagger-ui.html
    ```
 

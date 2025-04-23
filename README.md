@@ -15,6 +15,7 @@ API para gerenciamento de finanças pessoais, permitindo o controle de receitas,
 - Maven
 - Lombok
 - Flyway
+- Docker
 
 ## 🛠️ Funcionalidades
 

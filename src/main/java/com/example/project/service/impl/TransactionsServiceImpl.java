@@ -67,4 +67,12 @@ public class TransactionsServiceImpl implements TransactionsService {
         Utils.copyNonNullProperties(oldTransactions, transactions);
         return transactionsDao.save(oldTransactions);
     }
+
+    public List<Transactions> getTransactionsByDate(Date date) {
+        User user = AuthenticatedUser.get();
+        if (user.getProfiles().getRole().equals(RoleType.ADMIN)) {
+            return transactionsDao.findAllByDate(date);
+        }
+        return transactionsDao.findAllByDateAndUser_Id(date, user.getId());
+    }
 }

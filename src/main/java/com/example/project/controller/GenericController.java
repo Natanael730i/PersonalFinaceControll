@@ -1,6 +1,7 @@
 package com.example.project.controller;
 
 import com.example.project.service.GenericService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class GenericController<T, ID> {
 
     @PostMapping
     public ResponseEntity<T> create(@RequestBody T user) {
-        return ResponseEntity.ok(service.save(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
 
     @PutMapping("/{id}")
@@ -36,6 +37,6 @@ public class GenericController<T, ID> {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<T> delete(@PathVariable ID id) {
-        return ResponseEntity.ok(service.deleteById(id));
+        return ResponseEntity.status(HttpStatus.valueOf(204)).build();
     }
 }

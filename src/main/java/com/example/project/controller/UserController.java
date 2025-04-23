@@ -5,6 +5,8 @@ import com.example.project.dto.UserDto;
 import com.example.project.model.User;
 import com.example.project.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +25,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid LoginDto user) {
-        try {
-            return ResponseEntity.ok(service.login(user));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        return ResponseEntity.ok(service.login(user));
     }
 
     @GetMapping("/{id}")
@@ -42,7 +40,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody User user) {
-        return ResponseEntity.ok(service.save(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
 
     @PutMapping("/{id}")
@@ -52,6 +50,6 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> delete(@PathVariable UUID id) {
-        return ResponseEntity.ok(service.deleteById(id));
+        return ResponseEntity.status(HttpStatusCode.valueOf(204)).build();
     }
 }

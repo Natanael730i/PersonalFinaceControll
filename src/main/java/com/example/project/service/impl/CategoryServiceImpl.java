@@ -4,6 +4,7 @@ import com.example.project.dao.CategoryDao;
 import com.example.project.model.Category;
 import com.example.project.service.CategoryService;
 import com.example.project.utils.Utils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,12 +35,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category deleteById(UUID id) {
-        Category category = categoryDao.findById(id).orElse(null);
+    public void deleteById(UUID id) {
+        Category category = categoryDao.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found!"));
         if (category != null) {
             categoryDao.delete(category);
         }
-        return category;
     }
 
     @Override

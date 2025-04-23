@@ -40,7 +40,7 @@ public class DataInitializer {
         });
 
         // Criação do usuário ADMIN caso não exista
-        if (userDao.existsByEmail("admin@system.com")) {
+        if (!userDao.existsByEmail("admin")) {
             User admin = new User();
             admin.setName("Administrador do Sistema");
             admin.setEmail("admin@system.com");
@@ -50,7 +50,7 @@ public class DataInitializer {
         }
 
         // Criação do usuário padrão USER caso não exista
-        if (userDao.existsByEmail("user@system.com")) {
+        if (!userDao.existsByEmail("user@system.com")) {
             User user = new User();
             user.setName("Usuário Padrão");
             user.setEmail("user@system.com");

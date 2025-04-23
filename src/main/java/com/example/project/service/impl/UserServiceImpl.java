@@ -9,6 +9,7 @@ import com.example.project.model.User;
 import com.example.project.security.JwtConfig;
 import com.example.project.service.UserService;
 import com.example.project.utils.Utils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -58,18 +59,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteById(UUID id) {
-        User user = userDao.findById(id).orElse(null);
-        if (user != null) {
-            userDao.delete(user);
-            return new User();
-        }
-        return null;
+    public void deleteById(UUID id) {
+        User user = userDao.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("User not found!"));
+        userDao.delete(user);
     }
 
     @Override
     public User update(UserDto dto, UUID id) {
-        User oldUser = userDao.findById(id).orElseThrow();
+        User oldUser = userDao.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
 
         if (dto.password() != null && !dto.password().isBlank()) {
             oldUser.setPassword(Utils.hashPassword(dto.password()));
@@ -83,14 +82,13 @@ public class UserServiceImpl implements UserService {
         return userDao.save(oldUser);
     }
 
-
-
     @Override
-    public String login(LoginDto login) throws Exception {
-        User user = userDao.findByEmail(login.email());
+    public String login(LoginDto login) {
+        User user = userDao.findByEmail(login.email())
+                .orElseThrow(() -> new EntityNotFoundException("Email not found!"));
 
         if (user == null || !Utils.validatePassword(login.password(), user.getPassword())) {
-            throw new Exception("Usuário ou senha inválidos.");
+            throw new EntityNotFoundException("Login data not valid");
         }
 
         return jwtConfig.createJWT(user);
@@ -98,6 +96,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        return userDao.findByEmail(email);
+        return userDao.findByEmail(email)
+                .orElseThrow(() ->new EntityNotFoundException("Email not found!"));
     }
 }

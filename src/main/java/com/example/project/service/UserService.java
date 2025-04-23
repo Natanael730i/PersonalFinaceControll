@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    String login(LoginDto user) throws Exception;
+    String login(LoginDto user);
     User getUserByEmail(String email);
     User update(UserDto dto, UUID id);
     List<User> findAll();
     User findById(UUID id);
     User save(User t);
-    User deleteById(UUID id);
+    void deleteById(UUID id);
 }

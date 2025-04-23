@@ -7,6 +7,8 @@ import com.example.project.model.enums.RoleType;
 import com.example.project.security.AuthenticatedUser;
 import com.example.project.service.TransactionsService;
 import com.example.project.utils.Utils;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -34,11 +36,13 @@ public class TransactionsServiceImpl implements TransactionsService {
     @Override
     public Transactions findById(UUID uuid) {
         User user = AuthenticatedUser.get();
-        Transactions transactions = transactionsDao.findById(uuid).orElse(null);
-        if (transactions != null && (user.getProfiles().getRole().equals(RoleType.ADMIN) || transactions.getUser().equals(user))) {
+        Transactions transactions = transactionsDao.findById(uuid)
+                .orElseThrow(() -> new EntityNotFoundException("transactions with id: " + uuid + " not found"));
+        if ((user.getProfiles().getRole().equals(RoleType.ADMIN) || transactions.getUser().equals(user))) {
             return transactions;
+        } else {
+            throw new AccessDeniedException("Access denied");
         }
-        return null;
     }
 
     @Override
@@ -50,19 +54,21 @@ public class TransactionsServiceImpl implements TransactionsService {
     }
 
     @Override
-    public Transactions deleteById(UUID id) {
-        Transactions transactions = transactionsDao.findById(id).orElse(null);
-        if (transactions != null && transactions.getUser().equals(AuthenticatedUser.get())) {
-            transactionsDao.delete(transactions);
+    public void deleteById(UUID id) {
+        Transactions transactions = transactionsDao.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Transactions with id " + id + " not found!"));
+        if (!transactions.getUser().equals(AuthenticatedUser.get())) {
+            throw new AccessDeniedException("Access denied!");
         }
-        return transactions;
+        transactionsDao.delete(transactions);
     }
 
     @Override
     public Transactions update(Transactions transactions, UUID uuid) {
-        Transactions oldTransactions = transactionsDao.findById(uuid).orElse(null);
-        if (oldTransactions == null) {
-            return transactions;
+        Transactions oldTransactions = transactionsDao.findById(uuid)
+                .orElseThrow(() ->new EntityNotFoundException("Transactions whit id " + uuid + " not found!"));
+        if (!transactions.getUser().equals(oldTransactions.getUser())) {
+            throw new  AccessDeniedException("Access denied!");
         }
         Utils.copyNonNullProperties(oldTransactions, transactions);
         return transactionsDao.save(oldTransactions);

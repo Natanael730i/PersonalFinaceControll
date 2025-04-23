@@ -4,6 +4,7 @@ import com.example.project.dao.ProfileDao;
 import com.example.project.model.Profile;
 import com.example.project.service.ProfileService;
 import com.example.project.utils.Utils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Profile findById(UUID id) {
-        return profileDao.findById(id).orElse(null);
+        return profileDao.findById(id).orElseThrow(() -> new EntityNotFoundException("Profile not found!"));
     }
 
     @Override
@@ -34,12 +35,11 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile deleteById(UUID id) {
-        Profile profile = profileDao.findById(id).orElse(null);
+    public void deleteById(UUID id) {
+        Profile profile = profileDao.findById(id).orElseThrow(() -> new EntityNotFoundException("Profile not found!"));
         if (profile != null) {
             profileDao.delete(profile);
         }
-        return profile;
     }
 
     @Override

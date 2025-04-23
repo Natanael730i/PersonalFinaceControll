@@ -15,4 +15,6 @@ public interface UserService {
     User findById(UUID id);
     User save(User t);
     void deleteById(UUID id);
+
+    boolean emailJaCadastrado(String email);
 }

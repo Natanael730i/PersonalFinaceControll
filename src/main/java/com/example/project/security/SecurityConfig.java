@@ -1,6 +1,7 @@
 package com.example.project.security;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.web.SecurityFilterChain;
@@ -38,7 +39,12 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",
                                         "/actuator/**"
                                 ).permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers(
+                                        HttpMethod.POST
+                                ).hasAuthority("ADMIN")
+                                .anyRequest(
+
+                                ).authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)

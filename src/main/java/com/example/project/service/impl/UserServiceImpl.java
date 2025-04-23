@@ -65,6 +65,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean emailJaCadastrado(String email) {
+        return userDao.findByEmail(email).isPresent();
+    }
+
+    @Override
     public User update(UserDto dto, UUID id) {
         User oldUser = userDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found!"));

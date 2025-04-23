@@ -26,4 +26,9 @@ public class TransactionsController extends GenericController<Transactions, UUID
     public List<Transactions> getTransactionsByDate(@PathVariable Long dateLong){
         return service.getTransactionsByDate(new Date(dateLong));
     }
+
+    @GetMapping("/{initialDate}/{finalDate}")
+    public List<Transactions> getDateByPeriod(@PathVariable Long initialDate, @PathVariable Long finalDate){
+        return service.getDateByPeriod(new Date(initialDate), new Date(finalDate));
+    }
 }

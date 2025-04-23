@@ -75,4 +75,13 @@ public class TransactionsServiceImpl implements TransactionsService {
         }
         return transactionsDao.findAllByDateAndUser_Id(date, user.getId());
     }
+
+    @Override
+    public List<Transactions> getDateByPeriod(Date initialDate, Date finalDate) {
+        User user = AuthenticatedUser.get();
+        if (user.getProfiles().getRole().equals(RoleType.ADMIN)) {
+            return transactionsDao.findAllByDateBetween(initialDate, finalDate);
+        }
+        return transactionsDao.findAllByDateBetweenAndUser_Id(initialDate, finalDate, user.getId());
+    }
 }

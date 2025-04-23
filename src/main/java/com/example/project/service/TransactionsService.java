@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface TransactionsService extends GenericService<Transactions, UUID>{
     List<Transactions> getTransactionsByDate(Date date);
+
+    List<Transactions> getDateByPeriod(Date initialDate, Date finalDate);
 }

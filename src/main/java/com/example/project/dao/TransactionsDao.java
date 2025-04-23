@@ -13,4 +13,8 @@ public interface TransactionsDao extends CrudRepository<Transactions, UUID> {
     List<Transactions> findAllByDate(Date date);
 
     List<Transactions> findAllByDateAndUser_Id(Date date, UUID userId);
+
+    List<Transactions> findAllByDateBetween(Date dateAfter, Date dateBefore);
+
+    List<Transactions> findAllByDateBetweenAndUser_Id(Date dateAfter, Date dateBefore, UUID userId);
 }

@@ -1,5 +1,6 @@
 package com.example.project.model;
 
+import com.example.project.model.enums.Type;
 import jakarta.persistence.*;
 import lombok.Data;
 

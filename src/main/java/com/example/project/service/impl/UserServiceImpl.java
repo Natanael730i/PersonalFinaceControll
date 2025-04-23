@@ -40,19 +40,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
 
-        Set<Profile> profiles = new HashSet<>();
+        Profile profiles = new Profile();
 
-        if (user.getProfiles() != null && !user.getProfiles().isEmpty()) {
-            for (Profile profile : user.getProfiles()) {
-                if (profile.getId() != null) {
-                    profileDao.findById(profile.getId()).ifPresent(profiles::add);
-                }
-                else if (profile.getCode() != null) {
-                    Profile foundByCode = profileDao.findByCode(profile.getCode());
-                    if (foundByCode != null) {
-                        profiles.add(foundByCode);
-                    }
-                }
+        if (user.getProfiles().getId() != null) {
+            profiles = profileDao.findById(user.getProfiles().getId()).orElse(null);
+        }
+        if (user.getProfiles().getCode() != null) {
+            Profile foundByCode = profileDao.findByCode(user.getProfiles().getCode());
+            if (foundByCode != null) {
+                profiles = foundByCode;
             }
         }
 
@@ -82,14 +78,7 @@ public class UserServiceImpl implements UserService {
         if (dto.name() != null) oldUser.setName(dto.name());
         if (dto.email() != null) oldUser.setEmail(dto.email());
 
-        if (dto.profileIds() != null && !dto.profileIds().isEmpty()) {
-            Set<Profile> profiles = dto.profileIds().stream()
-                    .map(profileDao::findById)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toSet());
-            oldUser.setProfiles(profiles);
-        }
+        if (dto.profileIds() != null ) oldUser.setProfiles(dto.profileIds());
 
         return userDao.save(oldUser);
     }

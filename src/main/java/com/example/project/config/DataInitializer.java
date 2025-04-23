@@ -1,14 +1,13 @@
 package com.example.project.config;
 
-import com.example.project.model.Profile;
-import com.example.project.model.User;
 import com.example.project.dao.ProfileDao;
 import com.example.project.dao.UserDao;
+import com.example.project.model.Profile;
+import com.example.project.model.User;
+import com.example.project.model.enums.RoleType;
 import com.example.project.utils.Utils;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
-
-import java.util.*;
 
 @Component
 public class DataInitializer {
@@ -27,6 +26,7 @@ public class DataInitializer {
         Profile adminProfile = profileDao.findByName("ADMIN").orElseGet(() -> {
             Profile profile = new Profile();
             profile.setName("ADMIN");
+            profile.setRole(RoleType.ADMIN);
             profile.setCode(1L);
             return profileDao.save(profile);
         });
@@ -34,6 +34,7 @@ public class DataInitializer {
         Profile userProfile = profileDao.findByName("USER").orElseGet(() -> {
             Profile profile = new Profile();
             profile.setCode(2L);
+            profile.setRole(RoleType.USER);
             profile.setName("USER");
             return profileDao.save(profile);
         });
@@ -44,7 +45,7 @@ public class DataInitializer {
             admin.setName("Administrador do Sistema");
             admin.setEmail("admin@system.com");
             admin.setPassword(Utils.hashPassword("admin123"));
-            admin.setProfiles(Set.of(adminProfile));
+            admin.setProfiles(adminProfile);
             userDao.save(admin);
         }
 
@@ -54,7 +55,7 @@ public class DataInitializer {
             user.setName("Usuário Padrão");
             user.setEmail("user@system.com");
             user.setPassword(Utils.hashPassword("user123"));
-            user.setProfiles(Set.of(userProfile));
+            user.setProfiles(userProfile);
             userDao.save(user);
         }
 

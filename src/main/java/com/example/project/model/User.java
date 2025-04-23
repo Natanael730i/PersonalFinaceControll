@@ -8,18 +8,11 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Entity(name = "'USER'")
 public class User implements UserDetails {
-
-    public User() {
-        this.profiles = new HashSet<>(profiles);
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,13 +23,8 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany(fetch =  FetchType.EAGER)
-    @JoinTable(
-            name = "user_profile",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "profile_id")
-    )
-    private Set<Profile> profiles = new HashSet<>();
+    @ManyToOne
+    private Profile profiles;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -44,9 +32,7 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return profiles.stream()
-                .map(p -> (GrantedAuthority) () -> p.getName().toUpperCase())
-                .toList();
+        return List.of(profiles);
     }
 
     @Override

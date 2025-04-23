@@ -4,6 +4,7 @@ import com.example.project.dto.LoginDto;
 import com.example.project.dto.UserDto;
 import com.example.project.model.User;
 import com.example.project.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User Controller")
 public class UserController {
 
     private final UserService service;

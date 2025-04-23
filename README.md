@@ -14,6 +14,7 @@ API para gerenciamento de finanças pessoais, permitindo o controle de receitas,
 - PostgreSQL
 - Maven
 - Lombok
+- flyway
 
 ## 🛠️ Funcionalidades
 

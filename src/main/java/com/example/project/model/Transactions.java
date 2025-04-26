@@ -25,6 +25,6 @@ public class Transactions {
     private Category category;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "'user'", referencedColumnName = "id")
+    @JoinColumn(name = "users", referencedColumnName = "id")
     private User user;
 }

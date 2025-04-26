@@ -10,6 +10,7 @@ import com.example.project.security.JwtConfig;
 import com.example.project.service.UserService;
 import com.example.project.utils.Utils;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -92,7 +93,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Email not found!"));
 
         if (user == null || !Utils.validatePassword(login.password(), user.getPassword())) {
-            throw new EntityNotFoundException("Login data not valid");
+            throw new BadCredentialsException("Login data not valid");
         }
 
         return jwtConfig.createJWT(user);
